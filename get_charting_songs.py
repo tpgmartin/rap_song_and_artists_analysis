@@ -1,6 +1,6 @@
 import billboard
+import csv
 from datetime import date, datetime, timedelta
-import json
 
 def get_chart_entries(playlist, dates):
     ret = []
@@ -27,17 +27,18 @@ def get_songs_by_artists(charts):
 
 def main():
 
-    dates = [date(year = year, month = month, day = 1) for month in range(1,13) for year in range(2010,2019)]
+    dates = [date(year = year, month = month, day = 1) for month in range(1,13) for year in range(2017,2019)]
 
-    charts = get_chart_entries("hot-100", dates)
+    charts = get_chart_entries("rap-albums", dates)
 	
     songs_by_artists = get_songs_by_artists(charts)
 
-    with open("songs_by_artists_since_2010.json", "w") as outfile:
-        json.dump(songs_by_artists, outfile, sort_keys=True, indent=4)
-
-    
-
+    with open("./data/charting_rap_albums_since_2017.csv", "w") as f:
+        w = csv.writer(f)
+        w.writerow(["artist", "album"])
+        for artist, albums in songs_by_artists.items():
+            for album in albums:
+                w.writerow([artist, album])
 
 if __name__ == "__main__":
     main()
