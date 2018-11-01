@@ -13,6 +13,7 @@ tracks_by_artist_and_album = pd.read_csv("./data/tracks_by_artist_and_album.csv"
 filtered_tracks_by_artist_and_album = tracks_by_artist_and_album[tracks_by_artist_and_album["artist"].isin(target_artists)]
 filtered_tracks_by_artist_and_album = filtered_tracks_by_artist_and_album[~filtered_tracks_by_artist_and_album["track"].str.contains("Ft.",regex=False)]
 filtered_tracks_by_artist_and_album = filtered_tracks_by_artist_and_album[~filtered_tracks_by_artist_and_album["track"].str.contains("[",regex=False)]
+filtered_tracks_by_artist_and_album = filtered_tracks_by_artist_and_album[~filtered_tracks_by_artist_and_album["track"].str.contains("by",regex=False)]
 
 grouped = filtered_tracks_by_artist_and_album.groupby(["artist"]).agg("count")
 grouped.reset_index(inplace=True)
