@@ -1,29 +1,53 @@
+from bs4 import BeautifulSoup
 import config
 import json
+import pandas as pd
 import requests
 
-# song_titles = []
-# with open('./data/songs_by_artists_since_2010.json') as data:
-#     d = json.load(data)
-#     for artist, song_title in d.items():
-#         song_titles.extend(song_title)
+base_url = "http://api.genius.com"
+headers = {"Authorization": "Bearer {}".format(config.GENIUS_CONFIG["CLIENT_ACCESS_TOKEN"])}
 
-artist = "A Boogie Wit da Hoodie Featuring Kodak Black"
-song_title = "Drowning"
+def get_song_info(artist, track):
+    search_url = base_url + "/search"
+    params = {"q": track}
 
-if __name__ == "__main__":
-    url = "http://api.genius.com/search"
-    headers = {"Authorization": "Bearer {}".format(config.GENIUS_CONFIG["CLIENT_ACCESS_TOKEN"])}
-
-    params = {"q": song_title}
-    response = requests.get(url, params=params, headers=headers)
+    response = requests.get(search_url, params=params, headers=headers)
     json = response.json()
+
     song_info = None
     for hit in json["response"]["hits"]:
-        print(hit["result"]["primary_artist"]["name"])
         if hit["result"]["primary_artist"]["name"] == artist:
             song_info = hit
             break
-    if song_info:
-        song_api_path = song_info["result"]["api_path"]
-        print(lyrics_from_song_api_path(song_api_path))
+
+    return song_info
+
+def lyrics_from_song_api_path(song_api_path):
+    song_url = base_url + song_api_path
+    response = requests.get(song_url, headers=headers)
+    json = response.json()
+    path = json["response"]["song"]["path"]
+
+    page_url = "http://genius.com" + path
+    response = requests.get(page_url)
+    html = BeautifulSoup(response.text, "html5lib")
+    [h.extract() for h in html("script")]
+    lyrics = html.find("div", class_="lyrics").get_text().strip()
+
+    return lyrics
+
+if __name__ == "__main__":
+
+    tracks_by_artist = pd.read_csv("./data/sample_tracks_by_artists.csv")
+    tracks_by_artist["lyrics"] = None
+
+    for i, row in tracks_by_artist.iterrows():
+
+        song_info = get_song_info(row["artist"], row["track"])
+
+        if song_info:
+            song_api_path = song_info["result"]["api_path"]
+            lyrics = lyrics_from_song_api_path(song_api_path)
+            tracks_by_artist.set_value(i,'lyrics',lyrics)
+    
+    tracks_by_artist.to_csv("./data/tracks_with_lyrics.csv", index=False,)

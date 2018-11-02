@@ -1,4 +1,5 @@
 config.py
+data/tracks_with_lyrics.csv
 venv
 __pycache__
 .ipynb_checkpoints
