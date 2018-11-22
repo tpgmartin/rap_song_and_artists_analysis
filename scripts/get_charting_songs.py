@@ -27,13 +27,13 @@ def get_songs_by_artists(charts):
 
 def main():
 
-    dates = [date(year = year, month = month, day = 1) for month in range(1,13) for year in range(2017,2019)]
+    dates = [date(year = year, month = month, day = 1) for month in range(1,13) for year in range(2013,2019)]
 
     charts = get_chart_entries("rap-albums", dates)
 	
     songs_by_artists = get_songs_by_artists(charts)
 
-    with open("./data/charting_rap_albums_since_2017.csv", "w") as f:
+    with open("./data/charting_rap_albums_since_2013.csv", "w") as f:
         w = csv.writer(f)
         w.writerow(["artist", "album"])
         for artist, albums in songs_by_artists.items():
