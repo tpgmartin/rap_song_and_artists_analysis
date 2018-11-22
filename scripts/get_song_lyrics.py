@@ -38,7 +38,7 @@ def lyrics_from_song_api_path(song_api_path):
 
 if __name__ == "__main__":
 
-    tracks_by_artist = pd.read_csv("./data/sample_tracks_by_artists.csv")
+    tracks_by_artist = pd.read_csv("./data/sample_tracks_by_artists_since_2013.csv")
     tracks_by_artist["lyrics"] = None
 
     for i, row in tracks_by_artist.iterrows():
@@ -50,4 +50,4 @@ if __name__ == "__main__":
             lyrics = lyrics_from_song_api_path(song_api_path)
             tracks_by_artist.set_value(i,'lyrics',lyrics)
     
-    tracks_by_artist.to_csv("./data/tracks_with_lyrics.csv", index=False,)
+    tracks_by_artist.to_csv("./data/tracks_with_lyrics_since_2013.csv", index=False,)
