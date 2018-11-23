@@ -20,7 +20,7 @@ def get_genres_for_artist(artist):
 
 if __name__ == "__main__":
 
-    artists = pd.read_csv("./data/target_artists.csv")["artist"]
+    artists = pd.read_csv("./data/artists_with_at_least_20_tracks.csv")["artist"]
 
     artists_by_genres = []
     for artist in artists:
