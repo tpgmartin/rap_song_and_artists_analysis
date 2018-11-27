@@ -13,6 +13,7 @@ def get_song_info(artist, track):
 
     response = requests.get(search_url, params=params, headers=headers)
     json = response.json()
+    print(json["response"]["hits"])
 
     song_info = None
     for hit in json["response"]["hits"]:
@@ -25,6 +26,7 @@ def get_song_info(artist, track):
 def lyrics_from_song_api_path(song_api_path):
     song_url = base_url + song_api_path
     response = requests.get(song_url, headers=headers)
+    print(response)
     json = response.json()
     path = json["response"]["song"]["path"]
 
@@ -33,21 +35,23 @@ def lyrics_from_song_api_path(song_api_path):
     html = BeautifulSoup(response.text, "html5lib")
     [h.extract() for h in html("script")]
     lyrics = html.find("div", class_="lyrics").get_text().strip()
+    print(lyrics)
 
     return lyrics
 
 if __name__ == "__main__":
 
-    tracks_by_artist = pd.read_csv("./data/filtered_tracks_for_top_10_artists.csv")
+    tracks_by_artist = pd.read_csv("./data/missing_lyrics.csv")
     tracks_by_artist["lyrics"] = None
 
     for i, row in tracks_by_artist.iterrows():
-
+        print(row["artist"], row["track"])
         song_info = get_song_info(row["artist"], row["track"])
+        print(song_info)
 
         if song_info:
             song_api_path = song_info["result"]["api_path"]
             lyrics = lyrics_from_song_api_path(song_api_path)
             tracks_by_artist.set_value(i,'lyrics',lyrics)
     
-    tracks_by_artist.to_csv("./data/tracks_with_lyrics_for_top_10_artists.csv", index=False,)
+    # tracks_by_artist.to_csv("./data/tracks_with_missing_lyrics_since_2013.csv", index=False,)

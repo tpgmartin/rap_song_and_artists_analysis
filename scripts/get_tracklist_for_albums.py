@@ -4,7 +4,7 @@ import re
 import requests
 
 tracks_by_album_and_artist = []
-with open('./data/charting_rap_albums_since_2013.csv') as f:
+with open('./data/charting_rap_albums_since_2000.csv') as f:
     reader = csv.reader(f)
     next(reader, None)
     
@@ -35,7 +35,7 @@ with open('./data/charting_rap_albums_since_2013.csv') as f:
                 tracks.append(track)
         tracks_by_album_and_artist.extend(tracks)
 
-with open("./data/tracks_by_artist_and_album_since_2013.csv", "w") as f:
+with open("./data/tracks_by_artist_and_album_since_2000.csv", "w") as f:
     w = csv.writer(f)
     w.writerow(["artist", "album", "track"])
     for track in tracks_by_album_and_artist:
