@@ -16,7 +16,7 @@ Research tends to focus on one of two tasks,
 * Supervised: can songs be accurately categorised by a given piece of metadata e.g. artist
 * Unsupervised: can the relationship between songs be characterised by a given piece of metadata e.g. genre
 
-This paper is falls into the former category.
+This paper is falls into the former category. In the supervised domain
 
 This 
 
@@ -42,7 +42,11 @@ Michael Fell and Caroline Sporleder. 2014. "Lyrics-based Analysis and Classifica
 
 ### Questions
 
-* List of analytical questions to tackle
+This project will specifically address the following questions,
+
+1. Can the model match the reported results of other authors?
+2. How does the choice between bag of words (BOW) and word embedding affect the accuracy of the model and why?
+3. How does the choice between classifier affect the accuracy of the model any why?
 
 List of objectives
 
@@ -77,7 +81,28 @@ With a data collected, I planned to do the following,
 
 * Pre-process the lyrics following typical NLP techniques. Using Sklearn 
 
-Plan
+As part of the pre-processing process, I needed to go through a process of feature engineering
+
+Features considered for each track
+
+* Song vectors
+* Total line count
+* Average line length
+* Unique word proportion
+
+To get the raw text data into a usable format I used one of the following processes to get the lyrics into a vector format.
+
+* TF-IDF on the raw lyrics
+* TF-IDF after POS-tagging of the raw lyrics
+* Doc2Vec
+
+Following the approach of other papers on this topic, I will use the following classifier for the final model,
+
+* Logistic regression,
+* SVM,
+* Naive Bayes. (for naive bayes need to set doc2vec to particular setting)
+
+(Why???)
 
 ### Data Preprocessing
 
@@ -113,8 +138,40 @@ Evaluation metrics
 
 For best performing classifier produce confusion matrix for test results
 
+#### Notebooks
 
-## Conclusions
+* "TF-IDF with Logistic Regression"
+* "POS-Tagging with Logistic Regression"
+* "Doc2Vec with Logistic Regression"
+* "TF-IDF with Additional Features for Logistic Regression"
+
+TF-IDF Representation
+
+| Classifier          | Precision | Recall | F Measure |
+| ------------------- | --------- | ------ | --------- |
+| Logistic Regression | 82.3%     | 81.9%  | 81.6%     |
+| Linear SVC          | 82.5%     | 81.4%  | 81.1%     |
+| Naive Bayes         | 55.4%     | 46.1%  | 45.2%     |
+
+TF-IDF with POS-tags Representation
+
+| Classifier          | Precision | Recall | F Measure |
+| ------------------- | --------- | ------ | --------- |
+| Logistic Regression | 69.7%     | 68.1%  | 67.1%     |
+| Linear SVC          | 71.4%     | 69.6%  | 68.6%     |
+| Naive Bayes         | 58.8%     | 61.4%  | 46.2%     |
+
+Doc2Vec Representation
+
+DBOW
+
+| Classifier          | Precision | Recall | F Measure |
+| ------------------- | --------- | ------ | --------- |
+| Logistic Regression | 68.6%     | 66.7%  | 66.4%     |
+| Linear SVC          | 74.4%     | 72.1%  | 71.9%     |
+| Naive Bayes         | 71.4%     | 70.1%  | 69.8%     |
+
+## IV. Conclusions
 
 ### Reflections
 
@@ -130,4 +187,4 @@ For best performing classifier produce confusion matrix for test results
 
 Relate to original objectives and motivations
 
-## References
+## V. References
