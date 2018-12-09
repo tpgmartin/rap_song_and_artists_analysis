@@ -138,6 +138,12 @@ Evaluation metrics
 
 For best performing classifier produce confusion matrix for test results
 
+A big part of of this project is to compare the performance of different text representations for the classification task. The text representations considered were,
+
+* Bag-of-Words: This is the simplest text representation considered, ... 
+* TF-IDF
+* Doc2Vec
+
 #### Notebooks
 
 * "TF-IDF with Logistic Regression"
@@ -170,6 +176,15 @@ DBOW
 | Logistic Regression | 68.6%     | 66.7%  | 66.4%     |
 | Linear SVC          | 74.4%     | 72.1%  | 71.9%     |
 | Naive Bayes         | 71.4%     | 70.1%  | 69.8%     |
+
+Best performing classifier by text representation
+
+| Text Representation | Classifier          | Precision | Recall | F Measure |
+| ------------------- | ------------------- | --------- | ------ | --------- |
+| Bag-of-Words        | Logistic Regression | 70.5%     | 68.6%  | 68.7%     |
+| TF-IDF              |  | 70.5%     | 68.6%  | 68.7%     |
+| Doc2Vec             |  | 70.5%     | 68.6%  | 68.7%     |
+
 
 ## IV. Conclusions
 
