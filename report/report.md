@@ -182,8 +182,8 @@ Best performing classifier by text representation
 | Text Representation | Classifier          | Precision | Recall | F Measure |
 | ------------------- | ------------------- | --------- | ------ | --------- |
 | Bag-of-Words        | Logistic Regression | 70.5%     | 68.6%  | 68.7%     |
-| TF-IDF              |  | 70.5%     | 68.6%  | 68.7%     |
-| Doc2Vec             |  | 70.5%     | 68.6%  | 68.7%     |
+| TF-IDF              | Linear SVC          | 82.6%     | 81.9%  | 81.8%     |
+| Doc2Vec             |  | %     | %  | %     |
 
 
 ## IV. Conclusions
