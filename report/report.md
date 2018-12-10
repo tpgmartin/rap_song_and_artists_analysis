@@ -183,7 +183,11 @@ Best performing classifier by text representation
 | ------------------- | ------------------- | --------- | ------ | --------- |
 | Bag-of-Words        | Logistic Regression | 70.5%     | 68.6%  | 68.7%     |
 | TF-IDF              | Linear SVC          | 82.6%     | 81.9%  | 81.8%     |
-| Doc2Vec             |  | %     | %  | %     |
+| Doc2Vec             | Linear SVC          | 78.4%     | 77.9%  | 77.6%     |
+
+Parameters
+
+
 
 
 ## IV. Conclusions
