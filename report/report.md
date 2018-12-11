@@ -9,26 +9,16 @@ Total 500 words
 
 ### Domain
 
-This project aims to create a model to accurately classify rap artists by their lyrics (or features generated from their lyrics) alone. Analysis of song lyrics is a popular research topic as they form an interesting area of natural language processing (NLP) research, as they have characteristics different to prose such as a greater emphasis on rhyme, structure, and repetition.
+This project aims to create a model to accurately classify tracks by  artists using their lyrics (or features generated from their lyrics) alone. Analysis of song lyrics is a popular research topic as they form an interesting area of natural language processing (NLP) research, as they have characteristics different to prose such as a greater emphasis on rhyme, structure, and repetition.
 
 Research tends to focus on one of two tasks,
 
 * Supervised: can songs be accurately categorised by a given piece of metadata e.g. artist
 * Unsupervised: can the relationship between songs be characterised by a given piece of metadata e.g. genre
 
-This paper is falls into the former category. In the supervised domain
-
-This 
-
-* Why lyrics?
-* Why rap artists?
-* Related literature
-
 ### Related Work
 
-Analysis of lyrics has proved to be a powerful analytical tool in the classification of songs at the level of artist, genre, and release date.
-
-Lyrics only
+This paper is falls into the former category. In the supervised domain there have been a number of attempts to classify song lyrics at the level of artist, release period, or genre. In all cases the
 
 Classifiers typically used include logistic
 
@@ -45,8 +35,9 @@ Michael Fell and Caroline Sporleder. 2014. "Lyrics-based Analysis and Classifica
 This project will specifically address the following questions,
 
 1. Can the model match the reported results of other authors?
-2. How does the choice between bag of words (BOW) and word embedding affect the accuracy of the model and why?
+2. How does the choice between text representation affect the accuracy of the model and why?
 3. How does the choice between classifier affect the accuracy of the model any why?
+4. Are some artists 
 
 List of objectives
 
@@ -54,11 +45,6 @@ List of objectives
 * Effectiveness of word embeddings vs bag-of-words
 * Find set of (derived?) features for an effective classifier
 * Get comparable performance to benchmark
-
-Other data exploration points
-* Differences by year?
-* Differences by location?
-* Differences by sub-genre?
 
 
 ## II. Approach
@@ -104,6 +90,9 @@ Following the approach of other papers on this topic, I will use the following c
 
 (Why???)
 
+http://billchambers.me/tutorials/2015/01/14/python-nlp-cheatsheet-nltk-scikit-learn.html
+
+
 ### Data Preprocessing
 
 Normalisation includes
@@ -130,13 +119,13 @@ Total 1000 words
 
 Link to html computation notebook ... 
 
-Evaluation metrics
-* Accuracy
-* Precision
-* Recall
-* F Measure
+The evaluation metrics I will use are,
 
-For best performing classifier produce confusion matrix for test results
+* Precision: the proportion of correctly classified elements for a given class, out of all the data points predicted for that class
+* Recall: the proportion of correctly classified elements for a given class, out of all the relevant data points for that class
+* F-Measure: a weighted average of precision and recall, over all classes.
+
+These are typically used for tasks such as this that deal with an unbalanced, multi-class classification problems. This is because they do a job of indicating how well a model identifies true positives, while keeping false positives and false negatives to a minimum.
 
 A big part of of this project is to compare the performance of different text representations for the classification task. The text representations considered were,
 
@@ -144,66 +133,49 @@ A big part of of this project is to compare the performance of different text re
 * TF-IDF
 * Doc2Vec
 
-#### Notebooks
+Discuss differences between logistic regression and SVM
 
-* "TF-IDF with Logistic Regression"
-* "POS-Tagging with Logistic Regression"
-* "Doc2Vec with Logistic Regression"
-* "TF-IDF with Additional Features for Logistic Regression"
 
-TF-IDF Representation
+TF-IDF Representation - also include hyperparameters
 
 | Classifier          | Precision | Recall | F Measure |
 | ------------------- | --------- | ------ | --------- |
-| Logistic Regression | 82.3%     | 81.9%  | 81.6%     |
-| Linear SVC          | 82.5%     | 81.4%  | 81.1%     |
-| Naive Bayes         | 55.4%     | 46.1%  | 45.2%     |
+| Logistic Regression | %     | %  | %     |
+| Linear SVC          | %     | %  | %     |
 
-TF-IDF with POS-tags Representation
-
-| Classifier          | Precision | Recall | F Measure |
-| ------------------- | --------- | ------ | --------- |
-| Logistic Regression | 69.7%     | 68.1%  | 67.1%     |
-| Linear SVC          | 71.4%     | 69.6%  | 68.6%     |
-| Naive Bayes         | 58.8%     | 61.4%  | 46.2%     |
-
-Doc2Vec Representation
-
-DBOW
+Doc2Vec Representation - also include hyperparameters
 
 | Classifier          | Precision | Recall | F Measure |
 | ------------------- | --------- | ------ | --------- |
-| Logistic Regression | 68.6%     | 66.7%  | 66.4%     |
-| Linear SVC          | 74.4%     | 72.1%  | 71.9%     |
-| Naive Bayes         | 71.4%     | 70.1%  | 69.8%     |
+| Logistic Regression |           |        |           |
+| Linear SVC          |           |        |           |
 
 Best performing classifier by text representation
 
-| Text Representation | Classifier          | Precision | Recall | F Measure |
-| ------------------- | ------------------- | --------- | ------ | --------- |
-| Bag-of-Words        | Logistic Regression | 70.5%     | 68.6%  | 68.7%     |
-| TF-IDF              | Linear SVC          | 82.6%     | 81.9%  | 81.8%     |
-| Doc2Vec             | Linear SVC          | 78.4%     | 77.9%  | 77.6%     |
-
-Parameters
-
-
+| Text Representation | Classifier          | Precision | Recall   | F Measure |
+| ------------------- | ------------------- | --------- | -------- | --------- |
+| Bag-of-Words        | Logistic Regression | 73.0%     | 72.5.6%  | 72.0%     |
+| TF-IDF              | Linear SVC          |           |          |           |
+| Doc2Vec             | Linear SVC          |           |          |           |
 
 
 ## IV. Conclusions
 
 ### Reflections
 
+Given the data collection process for this project, there are some concerns as to the direct reproducibility of this study. Discussed above, the lyrics were taken from a third-party website and assume a standard format for the convenience of the web scraper script. In addition, as the lyrics are entered via user submission they are not necessarily reliable in their content or format. Relatedly, although the tracks investigated were chosen specifically because only the target artists was credited as the featured artists, there were a number of instances of other artists appearing on the track without credit.
+
 * Dataset contained unbalanced classes - is this evident in wrongly classified artists?
 * Overall size of dataset may be an issue?
-* Problems with lyrics collected?
-    - User entered text - not necessarily reliable
-    - Inconsistencies in text format
-    - Song lyrics may also include other 
 * Not directly comparable to benchmarks due to scope of study: just one genre, only songs from 2000
 * What features were not considered? Is this important? Why/why not?
-* Reproducibility of study due to availability of data set
+* Only considered unigrams
 
 Relate to original objectives and motivations
 
+I believe this project has shown the efficacy of classifying artists by their written lyrics alone. From a business perspective, this has utility in forming the foundation of a text based search engine for a music index. This could also form a component of a music recommendation system, with suggestions based on the similarity of lyrical content between artists.
+
 ## V. References
+
+* http://cs229.stanford.edu/proj2013/CS229FinalPaper.pdf
+* https://publik.tuwien.ac.at/files/PubDat_166272.pdf
