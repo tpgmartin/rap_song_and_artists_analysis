@@ -3,8 +3,6 @@
 Thomas Martin
 16th December 2018
 
-Total 500 words
-
 ## I. Introduction
 
 ### Domain
@@ -28,12 +26,11 @@ Frequently follows an unsupervised task resulting in classification of artists
 
 ### Questions
 
-This project will specifically address the following questions,
+This project will specifically explore the following questions,
 
 1. Can the model match the reported results of other authors?
-2. How does the choice between text representation affect the accuracy of the model and why?
-3. How does the choice between classifier affect the accuracy of the model any why?
-4. Are some artists 
+2. How does the choice between text representation affect the accuracy of the model?
+3. How does the choice between classifier affect the accuracy of the model?
 
 List of objectives
 
@@ -59,7 +56,7 @@ All scripts for the data collection process are in the `scripts` folder.
 
 With a data collected, I planned to do the following,
 
-* Pre-process the lyrics following typical NLP techniques. Using Sklearn 
+* Pre-process the lyrics following typical NLP techniques.
 
 As part of the pre-processing process, I needed to go through a process of feature engineering
 
@@ -91,10 +88,7 @@ http://billchambers.me/tutorials/2015/01/14/python-nlp-cheatsheet-nltk-scikit-le
 
 Normalisation includes
 * Standardise casing
-* Removal of whitespace
-* Removal of punctuation
 * Removal of stopwords
-* (Did not perform lemmatisation - why?)
 
 Vectorisation
 * TF-IDF
@@ -116,26 +110,28 @@ Link to html computation notebook ...
 The evaluation metrics I will use are,
 
 * Precision: the proportion of correctly classified elements for a given class, out of all the data points predicted for that class
-* Recall: the proportion of correctly classified elements for a given class, out of all the relevant data points for that class
+* Recall: the proportion of correctly classified elements for a given class, out of all the relevant data points for that class from the training data
 * F-Measure: a weighted average of precision and recall, over all classes.
 
-These are typically used for tasks such as this that deal with an unbalanced, multi-class classification problems. This is because they do a job of indicating how well a model identifies true positives, while keeping false positives and false negatives to a minimum. 
+These are typically used for tasks such as this that deal with an unbalanced, multi-class classification problems. This is because they do a job of indicating how well a model identifies true positives, while keeping false positives and false negatives to a minimum.
 
 A big part of of this project is to compare the performance of different text representations for the classification task. The text representations considered were,
 
-* Bag-of-Words: This is the simplest text representation considered, ... 
-* TF-IDF
-* Doc2Vec
+* Bag-of-Words (BOW): This is the simplest text representation considered. Each track is represented by a vector where each value is a simple count of each token identified from the source text.  
+* TF-IDF: Short for text frequency-inverse document frequency. This weights the BOW representation by the inverse frequency with which a given token appears in a given track. This means that tokens that are frequently found across all tracks are penalised, whereas tokens found in only a few tracks are promoted.
+* Doc2Vec: This approach tries to predict a given word in a track using both the set of surrounding words as well as the document feature vector. This representation learns both syntactic and semantic meaning of tokens.
 
 Discuss differences between logistic regression and SVM
 
-Best performing classifier by text representation. For both TF-IDF and Doc2Vec we see an improvement over the BOW approach by around 7% across all evaluation metrics.
+For both TF-IDF and Doc2Vec we see an improvement over the BOW approach by around 7% across all evaluation metrics, and see almost identical performance between the former two. The difference between the text representations is potentially even smaller still if we were to consider the same classifier - for instance see the performance against the test set.
 
 | Text Representation | Classifier          | Precision | Recall   | F Measure |
 | ------------------- | ------------------- | --------- | -------- | --------- |
 | BOW                 | Logistic Regression | 73.0%     | 72.5.6%  | 72.0%     |
 | TF-IDF              | Linear SVC          | 79.9%     | 79.4%    | 79.0%     |
 | Doc2Vec             | Linear SVC          | 79.0%     | 78.9%    | 78.3%     |
+
+Why might the difference between the difference approaches be so small?
 
 The full results for the model using the Doc2Vec text representation are reproduced below.
 
@@ -145,37 +141,33 @@ For both text pr
 
 #### Doc2Vec
 
-             precision    recall  f1-score   support
-
-  Rick Ross       0.76      0.93      0.84        28
- Gucci Mane       0.70      0.58      0.64        12
-   The Game       0.82      0.93      0.87        30
-       T.I.       0.86      0.92      0.89        26
-     Eminem       0.76      0.59      0.67        22
-  Tech N9ne       0.75      0.69      0.72        13
-       E-40       0.91      0.62      0.74        16
-      Drake       0.76      0.90      0.83        21
-  Lil Wayne       0.80      0.73      0.76        22
- Snoop Dogg       0.69      0.64      0.67        14
-
-avg / total       0.79      0.79      0.78       204
+| Artist      | Precision | Recall | F Measure | Support |
+| ----------- | --------- | ------ | --------- | ------- |
+|   Rick Ross | 76%       |  93%   | 84%       | 28%     |
+|  Gucci Mane | 70%       |  58%   | 64%       | 12%     |
+|    The Game | 82%       |  93%   | 87%       | 30%     |
+|        T.I. | 86%       |  92%   | 89%       | 26%     |
+|      Eminem | 76%       |  59%   | 67%       | 22%     |
+|   Tech N9ne | 75%       |  69%   | 72%       | 13%     |
+|        E-40 | 91%       |  62%   | 74%       | 16%     |
+|       Drake | 76%       |  90%   | 83%       | 21%     |
+|   Lil Wayne | 80%       |  73%   | 76%       | 22%     |
+|  Snoop Dogg | 69%       |  64%   | 67%       | 14%     |
 
 #### TF-IDF
 
-             precision    recall  f1-score   support
-
-  Rick Ross       0.70      0.93      0.80        28
- Gucci Mane       0.78      0.58      0.67        12
-   The Game       0.85      0.97      0.91        30
-       T.I.       0.96      0.88      0.92        26
-     Eminem       0.61      0.50      0.55        22
-  Tech N9ne       0.67      0.77      0.71        13
-       E-40       0.92      0.75      0.83        16
-      Drake       0.79      0.90      0.84        21
-  Lil Wayne       0.89      0.73      0.80        22
- Snoop Dogg       0.75      0.64      0.69        14
-
-avg / total       0.80      0.79      0.79       204
+| Artist      | Precision | Recall | F Measure | Support |
+| ----------- | --------- | ------ | --------- | ------- |
+|  Rick Ross  | 70%       | 93%    | 80%       | 28%     |
+| Gucci Mane  | 78%       | 58%    | 67%       | 12%     |
+|   The Game  | 85%       | 97%    | 91%       | 30%     |
+|       T.I.  | 96%       | 88%    | 92%       | 26%     |
+|     Eminem  | 61%       | 50%    | 55%       | 22%     |
+|  Tech N9ne  | 67%       | 77%    | 71%       | 13%     |
+|       E-40  | 92%       | 75%    | 83%       | 16%     |
+|      Drake  | 79%       | 90%    | 84%       | 21%     |
+|  Lil Wayne  | 89%       | 73%    | 80%       | 22%     |
+| Snoop Dogg  | 75%       | 64%    | 69%       | 14%     |
 
 We see that precision and recall are not always in agreement with each other, for instance Rick Ross has a below average precision by above average recall, and the opposite is the case for Lil Wayne. This means that for an artist like Rick Ross, the model did a good job of correctly classifying tracks to him, but also attributed more tracks from other artists to him as well. For Lil Wayne, the model frequently attributed his songs to other artists. This can be seen in the off-diagonal elements of the confusion matrix.
 
@@ -185,8 +177,8 @@ It's interesting to also not the difference in the standard deviation of the two
 
 | Text Representation | Precision | Recall   | F Measure |
 | ------------------- | --------- | -------- | --------- |
-| TF-IDF              | 11.4%     | 15.7%    | 11.7%     |
-| Doc2Vec             | 6.8%      | 15.0%    | 9.0%      |
+| TF-IDF              | 80%±11%   | 79%±16%  | 79%±12%   |
+| Doc2Vec             | 79%±6.8%  | 79%±15%  | 78%±9.0%  |
 
 It is also worth noting that the classification for either model were highly correlated. Considering f-measure only, which has a Pearson correlation coefficient of 0.88 and p-value of 0.0008, meaning that there is a large, positive correlation between the two sets of results, which is statistically significant.
 
@@ -208,7 +200,7 @@ I believe this project has shown the efficacy of classifying artists by their wr
 
 ## V. References
 
-* Hussein Hirjee and Daneil G. Brown. 2010 "Using Automated Rhyme Detection to Characterize Rhyming Style in Rap Music" Empirical Musicology Review, pp.121-145
-* Rudolf Mayer, Robert Neumayer, and Andreas Rauber 2008 "Rhyme and Style Features for Musical Genre Classification by Song Lyrics" ISMIR 2008, pp. 337-342
-* Adam Sadovsky and Xing Chen "Song Genre and Artist Classification via Supervised Learning from Lyrics" CS 224N Final Project
-* Michael Brevard and Kyle Kenyon, "Artist Classifier" 
+1. Hussein Hirjee and Daneil G. Brown. 2010 "Using Automated Rhyme Detection to Characterize Rhyming Style in Rap Music" Empirical Musicology Review, pp.121-145
+2. Rudolf Mayer, Robert Neumayer, and Andreas Rauber 2008 "Rhyme and Style Features for Musical Genre Classification by Song Lyrics" ISMIR 2008, pp. 337-342
+3. Adam Sadovsky and Xing Chen "Song Genre and Artist Classification via Supervised Learning from Lyrics" CS 224N Final Project
+4. Michael Brevard and Kyle Kenyon, "Artist Classifier" 
