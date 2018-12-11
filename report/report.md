@@ -119,7 +119,7 @@ The evaluation metrics I will use are,
 * Recall: the proportion of correctly classified elements for a given class, out of all the relevant data points for that class
 * F-Measure: a weighted average of precision and recall, over all classes.
 
-These are typically used for tasks such as this that deal with an unbalanced, multi-class classification problems. This is because they do a job of indicating how well a model identifies true positives, while keeping false positives and false negatives to a minimum.
+These are typically used for tasks such as this that deal with an unbalanced, multi-class classification problems. This is because they do a job of indicating how well a model identifies true positives, while keeping false positives and false negatives to a minimum. 
 
 A big part of of this project is to compare the performance of different text representations for the classification task. The text representations considered were,
 
@@ -129,7 +129,7 @@ A big part of of this project is to compare the performance of different text re
 
 Discuss differences between logistic regression and SVM
 
-Best performing classifier by text representation. For both TF-IDF and Doc2Vec we see an improvement over the BOW approach
+Best performing classifier by text representation. For both TF-IDF and Doc2Vec we see an improvement over the BOW approach by around 7% across all evaluation metrics.
 
 | Text Representation | Classifier          | Precision | Recall   | F Measure |
 | ------------------- | ------------------- | --------- | -------- | --------- |
@@ -140,6 +140,10 @@ Best performing classifier by text representation. For both TF-IDF and Doc2Vec w
 The full results for the model using the Doc2Vec text representation are reproduced below.
 
 ![Confusion Matrix for classifier using Doc2Vec text representation](./report/confusion_matrix.png "Confusion Matrix for classifier using Doc2Vec text representation")
+
+For both text pr
+
+#### Doc2Vec
 
              precision    recall  f1-score   support
 
@@ -156,7 +160,7 @@ The full results for the model using the Doc2Vec text representation are reprodu
 
 avg / total       0.79      0.79      0.78       204
 
-TF-IDF
+#### TF-IDF
 
              precision    recall  f1-score   support
 
@@ -173,11 +177,18 @@ TF-IDF
 
 avg / total       0.80      0.79      0.79       204
 
-
-We see that precision and recall are not always in agreement with each other, for instance Rick Ross has a below average precision by above average recall, and the opposite is the case for Lil Wayne. This means that an artist like Rick Ross, the model did a good job of correctly classifying tracks to him, but also attributed more tracks from other artists to him as well. For Lil Wayne, the model frequently attributed his songs to other artists. This can be seen in the off-diagonal elements of the confusion matrix.
+We see that precision and recall are not always in agreement with each other, for instance Rick Ross has a below average precision by above average recall, and the opposite is the case for Lil Wayne. This means that for an artist like Rick Ross, the model did a good job of correctly classifying tracks to him, but also attributed more tracks from other artists to him as well. For Lil Wayne, the model frequently attributed his songs to other artists. This can be seen in the off-diagonal elements of the confusion matrix.
 
 Due to these differences in precision and recall, it could be argued that the model was biased towards some artists more than others. However, this does not seems to be due to support i.e. the number of tracks by artist in the test set, but rather may have implications for the text representation.
 
+It's interesting to also not the difference in the standard deviation of the two text representations. We see that the standard deviation for precision for TF-IDF is almost twice that of Doc2Vec. This also has implication for the f-measure, as f-measure is calculated from precision and recall.
+
+| Text Representation | Precision | Recall   | F Measure |
+| ------------------- | --------- | -------- | --------- |
+| TF-IDF              | 11.4%     | 15.7%    | 11.7%     |
+| Doc2Vec             | 6.8%      | 15.0%    | 9.0%      |
+
+It is also worth noting that the classification for either model were highly correlated. Considering f-measure only, which has a Pearson correlation coefficient of 0.88 and p-value of 0.0008, meaning that there is a large, positive correlation between the two sets of results, which is statistically significant.
 
 ## IV. Conclusions
 
