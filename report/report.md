@@ -20,15 +20,11 @@ Research tends to focus on one of two tasks,
 
 This paper is falls into the former category. In the supervised domain there have been a number of attempts to classify song lyrics at the level of artist, release period, or genre. In all cases the
 
-Classifiers typically used include logistic
+Classifiers typically used include logistic regression 
 
-However, previous studies do not generally limit themselves by both music genre and release date 
-
-In general, previous work has used lyrics for the purpose of 
+However, previous studies do not generally limit themselves by both music genre and release date as this project does.
 
 Frequently follows an unsupervised task resulting in classification of artists
-
-Michael Fell and Caroline Sporleder. 2014. "Lyrics-based Analysis and Classification of Music." Proceedings of COLING 2014, the 25th International Conference on Computational Linguistics: Technical Papers, pp.620–631
 
 ### Questions
 
@@ -51,9 +47,7 @@ List of objectives
 
 ### Data Collection
 
-Due to [legal issues](https://genius.com/discussions/277279-Get-the-lyrics-of-a-song) surrounding the use and distribution of lyrics ... 
-
-The data for this project was taken from a couple websites. To find the set of relevant artists, the script `get_charting_albums.py` finds all albums to have featured on the Billboard Rap Albums chart between January 2000 and November 2018. From this, I wanted to find a set of the top 10 most prolific artists in this time period (why???). To do this I found the full track list for each album with `get_tracklist_for_albums.py`, and grouped the total number of released tracks by artist. For these ten artists, I found the matching lyrics for each song from [Genius.com](https://genius.com/) using `get_song_lyrics.py`. This set of lyrics was further refined as not all lyrics were successfully returned from the website following this procedure due to parsing errors. In total, the lyrics 679 tracks for 10 artists were found. 
+The data for this project was taken from a couple websites. To find the set of relevant artists, the script `get_charting_albums.py` finds all albums to have featured on the Billboard Rap Albums chart between January 2000 and November 2018. From this, I wanted to find a set of the top 10 most prolific artists in this time period, this is simply to ensure that I have sufficient number of tracks for each artist. To do this I found the full track list for each album with `get_tracklist_for_albums.py`, and grouped the total number of released tracks by artist. For these ten artists, I found the matching lyrics for each song from [Genius.com](https://genius.com/) using `get_song_lyrics.py`. This set of lyrics was further refined as not all lyrics were successfully returned from the website following this procedure due to parsing errors (In the notebook, I filter out row from the dataframe with null lyrics). In total, the lyrics 679 tracks for 10 artists were found.
 
 ![Total number of tracks with lyrics by artist](./report/total_number_of_tracks_by_artist.png "Total number of tracks with lyrics by artist")
 
@@ -135,28 +129,54 @@ A big part of of this project is to compare the performance of different text re
 
 Discuss differences between logistic regression and SVM
 
-
-TF-IDF Representation - also include hyperparameters
-
-| Classifier          | Precision | Recall | F Measure |
-| ------------------- | --------- | ------ | --------- |
-| Logistic Regression | %     | %  | %     |
-| Linear SVC          | %     | %  | %     |
-
-Doc2Vec Representation - also include hyperparameters
-
-| Classifier          | Precision | Recall | F Measure |
-| ------------------- | --------- | ------ | --------- |
-| Logistic Regression |           |        |           |
-| Linear SVC          |           |        |           |
-
-Best performing classifier by text representation
+Best performing classifier by text representation. For both TF-IDF and Doc2Vec we see an improvement over the BOW approach
 
 | Text Representation | Classifier          | Precision | Recall   | F Measure |
 | ------------------- | ------------------- | --------- | -------- | --------- |
-| Bag-of-Words        | Logistic Regression | 73.0%     | 72.5.6%  | 72.0%     |
-| TF-IDF              | Linear SVC          |           |          |           |
-| Doc2Vec             | Linear SVC          |           |          |           |
+| BOW                 | Logistic Regression | 73.0%     | 72.5.6%  | 72.0%     |
+| TF-IDF              | Linear SVC          | 79.9%     | 79.4%    | 79.0%     |
+| Doc2Vec             | Linear SVC          | 79.0%     | 78.9%    | 78.3%     |
+
+The full results for the model using the Doc2Vec text representation are reproduced below.
+
+![Confusion Matrix for classifier using Doc2Vec text representation](./report/confusion_matrix.png "Confusion Matrix for classifier using Doc2Vec text representation")
+
+             precision    recall  f1-score   support
+
+  Rick Ross       0.76      0.93      0.84        28
+ Gucci Mane       0.70      0.58      0.64        12
+   The Game       0.82      0.93      0.87        30
+       T.I.       0.86      0.92      0.89        26
+     Eminem       0.76      0.59      0.67        22
+  Tech N9ne       0.75      0.69      0.72        13
+       E-40       0.91      0.62      0.74        16
+      Drake       0.76      0.90      0.83        21
+  Lil Wayne       0.80      0.73      0.76        22
+ Snoop Dogg       0.69      0.64      0.67        14
+
+avg / total       0.79      0.79      0.78       204
+
+TF-IDF
+
+             precision    recall  f1-score   support
+
+  Rick Ross       0.70      0.93      0.80        28
+ Gucci Mane       0.78      0.58      0.67        12
+   The Game       0.85      0.97      0.91        30
+       T.I.       0.96      0.88      0.92        26
+     Eminem       0.61      0.50      0.55        22
+  Tech N9ne       0.67      0.77      0.71        13
+       E-40       0.92      0.75      0.83        16
+      Drake       0.79      0.90      0.84        21
+  Lil Wayne       0.89      0.73      0.80        22
+ Snoop Dogg       0.75      0.64      0.69        14
+
+avg / total       0.80      0.79      0.79       204
+
+
+We see that precision and recall are not always in agreement with each other, for instance Rick Ross has a below average precision by above average recall, and the opposite is the case for Lil Wayne. This means that an artist like Rick Ross, the model did a good job of correctly classifying tracks to him, but also attributed more tracks from other artists to him as well. For Lil Wayne, the model frequently attributed his songs to other artists. This can be seen in the off-diagonal elements of the confusion matrix.
+
+Due to these differences in precision and recall, it could be argued that the model was biased towards some artists more than others. However, this does not seems to be due to support i.e. the number of tracks by artist in the test set, but rather may have implications for the text representation.
 
 
 ## IV. Conclusions
@@ -177,5 +197,7 @@ I believe this project has shown the efficacy of classifying artists by their wr
 
 ## V. References
 
-* http://cs229.stanford.edu/proj2013/CS229FinalPaper.pdf
-* https://publik.tuwien.ac.at/files/PubDat_166272.pdf
+* Hussein Hirjee and Daneil G. Brown. 2010 "Using Automated Rhyme Detection to Characterize Rhyming Style in Rap Music" Empirical Musicology Review, pp.121-145
+* Rudolf Mayer, Robert Neumayer, and Andreas Rauber 2008 "Rhyme and Style Features for Musical Genre Classification by Song Lyrics" ISMIR 2008, pp. 337-342
+* Adam Sadovsky and Xing Chen "Song Genre and Artist Classification via Supervised Learning from Lyrics" CS 224N Final Project
+* Michael Brevard and Kyle Kenyon, "Artist Classifier" 
