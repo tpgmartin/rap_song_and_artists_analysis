@@ -117,7 +117,7 @@ These are typically used for tasks such as this that deal with an unbalanced, mu
 
 A big part of of this project is to compare the performance of different text representations for the classification task. The text representations considered were,
 
-* Bag-of-Words (BOW): This is the simplest text representation considered. Each track is represented by a vector where each value is a simple count of each token identified from the source text.  
+* Bag-of-Words (BOW): This is the simplest text representation considered. Each track is represented by a vector where each value of the vector is the frequency of each token identified from the source text.  
 * TF-IDF: Short for text frequency-inverse document frequency. This weights the BOW representation by the inverse frequency with which a given token appears in a given track. This means that tokens that are frequently found across all tracks are penalised, whereas tokens found in only a few tracks are promoted.
 * Doc2Vec: This approach tries to predict a given word in a track using both the set of surrounding words as well as the document feature vector. This representation learns both syntactic and semantic meaning of tokens.
 
@@ -131,7 +131,7 @@ For both TF-IDF and Doc2Vec we see an improvement over the BOW approach by aroun
 | TF-IDF              | Linear SVC          | 79.9%     | 79.4%    | 79.0%     |
 | Doc2Vec             | Linear SVC          | 79.0%     | 78.9%    | 78.3%     |
 
-Why might the difference between the difference approaches be so small?
+The small differences between the results indicate that BOW characterises the tracks well enough. To compare with TF-IDF, we see that the BOW vectors have a dimensionality of 15,593 whereas TF-IDF vectors are of 15,578 as the 30% most frequent tokens were dropped. In both cases this indicates a large degree of linear independence between the feature space of the extracted tokens. This is probably joint result result of not stemming tokens, as well as not filtering out infrequently occurring tokens. To give an example, vocalisations related to "ah" appeared the tokens "ah", "ah-ahh", "ah-em", "aha", "ahah", "ahahah", "ahh", "ahhh", "ahhhh", "ahhhhh", "ahhhhhhh". The small improvement of TF-IDF over BOW may be due to the feature scaling that the former introduces: BOW frequencies can be scaled to close to zero, aiding the classification process, without changing the dimensionality of the feature space.
 
 The full results for the model using the Doc2Vec text representation are reproduced below.
 
@@ -197,6 +197,8 @@ Given the data collection process for this project, there are some concerns as t
 Relate to original objectives and motivations
 
 I believe this project has shown the efficacy of classifying artists by their written lyrics alone. From a business perspective, this has utility in forming the foundation of a text based search engine for a music index. This could also form a component of a music recommendation system, with suggestions based on the similarity of lyrical content between artists.
+
+Adding more documents to the dataset will not necessarily aid the classifier
 
 ## V. References
 
