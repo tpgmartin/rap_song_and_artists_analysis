@@ -1,5 +1,9 @@
 # Rap Songs and Artists Analysis
 
+This repo contains documents for my IN3061 / INM430 (Principles of Data Science) coursework assignment.
+
+The HTML notebook can be viewed [here](https://smcse.city.ac.uk/student/aczd005/inm430_notebook.html)
+
 ## Scripts
 
 ### Get List of Artists
