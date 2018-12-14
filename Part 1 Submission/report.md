@@ -1,14 +1,17 @@
 # Classification of Rap Artists by Lyrics
 ## INM430 Coursework
+
 Thomas Martin
+
 16th December 2018
-Link to html computation notebook ... 
+
+Notebook: https://smcse.city.ac.uk/student/aczd005/inm430_notebook.html
 
 ## I. Introduction
 
 ### Domain
 
-This project aimed to create a model to accurately classify tracks by artists by lyrics. Analysis of lyrics is a popular research topic in natural language processing, as they have characteristics different to prose such as a greater emphasis on rhyme, structure, and repetition.
+This project aimed to create a model to accurately classify tracks by artists' lyrics. Analysis of lyrics is a popular research topic in natural language processing, as they have characteristics different to prose such as a greater emphasis on rhyme, structure, and repetition.
 
 ### Related Work
 
@@ -41,19 +44,21 @@ All scripts for the data collection process are in the `scripts` folder.
 
 I pre-processed the lyrics following typical NLP techniques: remove stopwords, extract tokens, remove non-alphabetic characters, and remove punctuation.
 
-I performed feature engineering to extract additional features from the source data. These combined features other authors considered as well as what I thought was appropriate. Features considered for each track,
+I performed feature engineering to extract features from the source data. These combined features other authors considered, as well as what I thought was appropriate. Features considered for each track,
 
-* Vectorised track lyrics: For text representations given below strategy. This will be the main feature in the project.
+* Vectorised track lyrics: For text representations given below strategy. This is main feature in the project.
 * Track line count
 * Average line length
 * Unique word proportion
 * Song structure
 
+See section 5. of the notebook for details
+
 The text representations considered were, bag-of-words, TF-IDF, Doc2Vec. These are typically used in classification tasks like this, although Doc2Vec is infrequently referenced in song classification.
 
 The classifiers considered were logistic regression and linear SVM. These are both often cited in multi-class classification tasks. Given these are linear models, it is easier to infer what they are doing behind-the-scenes.
 
-The evaluation metrics I used are precision, recall, and f-measure. These are used for tasks that deal with unbalanced, multi-class classification problems. This is because they can indicate how well a model identifies true positives, while keeping false positives and false negatives to a minimum.
+The evaluation metrics I used are precision, recall, and f-measure. These are used for tasks that deal with unbalanced, multi-class classification (Figure 1.). This is because they can indicate how well a model identifies true positives, while keeping false positives and false negatives to a minimum.
 
 For each text representation, I used grid search-cross validation to find the best classifier and hyperparameters using a training dataset. For the best performing model, I tested against a previously held out dataset.
 
@@ -125,7 +130,7 @@ The most successful trained models only ended up using song vectors as their sol
 |  Snoop Dogg |  89%      | 57%    | 70%       | 14      |
 
 
-Examining the results for TF-IDF, Rick Ross has a below average precision but above average recall, and the opposite is the case for Snoop Dogg. This means that for an artist like Rick Ross, the model did a good job of correctly classifying tracks to him, but also attributed more tracks from other artists to him as well. For  Snoop Dogg, the model frequently attributed his songs to other artists. This can be seen in the off-diagonal elements of the confusion matrix. Due to these differences in precision and recall, it could be argued that the model was biased towards some artists more than others.
+Examining the results for Doc2Vec, Rick Ross has a below average precision but above average recall, and the opposite is the case for Snoop Dogg. This means that for an artist like Rick Ross, the model did a good job of correctly classifying tracks to him, but also attributed more tracks from other artists to him as well. For  Snoop Dogg, the model frequently attributed his songs to other artists. This can be seen in the off-diagonal elements of the confusion matrix (Figure 2.). Due to these differences in precision and recall, it could be argued that the model was biased towards some artists more than others.
 
 Comparing text representations: Considering f-measure, has Pearson correlation coefficient of 0.92 and p-value of 0.0002, meaning that there is a large, positive correlation between the two sets of results, which is statistically significant. It's hard to characterise the differences between the two approaches considered. Looking at an artist like Snoop Dogg, who sees a 9% increase in f-measure from Doc2Vec to TF-IDF, this may be due to the smaller vocabulary used in the latter as well due to the fundamental differences between the text transformations. The Doc2Vec vocabulary contains all terms in the TF-IDF vocabulary, having a size of 3,448 vs 2,677.
 
