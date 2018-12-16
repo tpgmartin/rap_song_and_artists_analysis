@@ -36,7 +36,7 @@ Numerous authors have performed the task of classifying track lyrics by metadata
 
 To find the set of relevant artists, `get_charting_albums.py` found albums to have featured on the Billboard Rap Albums chart [3] from January 2000 to November 2018. For a set of the 10 most prolific artists in this period I found the full track list for each album with `get_tracklist_for_albums.py`, and grouped the total number of released tracks by artist. For these artists, I found the matching lyrics for each song from Genius.com [4] using `get_song_lyrics.py`. In total, the lyrics 679 tracks for 10 artists were found.
 
-![Total number of tracks with lyrics by artist](./report/total_number_of_tracks_by_artist.png "Total number of tracks with lyrics by artist")
+![Total number of tracks with lyrics by artist](./total_number_of_tracks_by_artist.png "Total number of tracks with lyrics by artist")
 
 All scripts for the data collection process are in the `scripts` folder.
 
@@ -56,7 +56,7 @@ See section 5. of the notebook for details
 
 The text representations considered were, bag-of-words, TF-IDF, Doc2Vec. These are typically used in classification tasks like this, although Doc2Vec is infrequently referenced in song classification.
 
-The classifiers considered were logistic regression and linear SVM. These are both often cited in multi-class classification tasks. Given these are linear models, it is easier to infer what they are doing behind-the-scenes.
+The classifiers considered were logistic regression and linear SVC. These are both often cited in multi-class classification tasks. Given these are linear models, it is easier to infer what they are doing behind-the-scenes.
 
 The evaluation metrics I used are precision, recall, and f-measure. These are used for tasks that deal with unbalanced, multi-class classification (Figure 1.). This is because they can indicate how well a model identifies true positives, while keeping false positives and false negatives to a minimum.
 
@@ -90,13 +90,23 @@ Both TF-IDF and Doc2Vec show improvement over the BOW approach across all evalua
 
 The small differences between the results indicate BOW characterises the tracks fairly well. To compare with TF-IDF, we see that the BOW vectors have a dimensionality of 13,488 whereas TF-IDF vectors are of 2,677 as both the 30% most frequent tokens, and terms occurring in fewer than 5 tracks were dropped. In the case of BOW especially, this indicates a large degree of linear independence between the feature space of the extracted tokens. This is probably joint result of not stemming tokens, as well as not filtering out infrequently occurring tokens. For example, vocalisations related to "ah" included "ahh", "ahhh", "ahhhh", "ahhhhh", "'ahhhhhhh'". Additionally, the small improvement of TF-IDF over BOW may be due to the feature scaling that the former introduces: frequencies can be scaled to close to zero, aiding the classification process, without changing the dimensionality of the feature space.
 
-Doc2Vec works very differently to the other two, as rather than map all tracks to the same vector space, it finds a distributed representation of lyrics in the track. This means the track is represented in a feature space embedded to represent word similarity. In theory this means that Doc2Vec better general document structure. However, the lower performance compared to TF-IDF is likely due to the inconsistent structure of songs, as well as the relatively small corpus of tracks considered. There is also the issue that a cutoff like min_df/max_df was not used as per TF-IDF as I was unsure how to do this.
+Doc2Vec works very differently to the other two, as rather than map all tracks to the same vector space, it finds a distributed representation of lyrics in the track. This means the track is represented in a feature space embedded to represent word similarity. This can mean that Doc2Vec better generalise document structure. However, the lower performance compared to TF-IDF is likely due to the inconsistent structure of songs, as well as the relatively small corpus of tracks considered. There is also the issue that a cutoff like min_df/max_df was not used as per TF-IDF as I was unsure how to implement this.
 
-For both representations, linear SVM outperforms logistic regressions, for instance test set accuracy for Doc2Vec reported 79.6% and 76.8% respectively. The small difference indicates that either linear model performs well. The small difference is likely due to the different loss functions used.
+For both representations, linear SVC outperforms logistic regressions, for instance test set accuracy for Doc2Vec reported 79.6% and 76.8% respectively. The small difference indicates that either linear model performs well. The small difference is likely due to the different loss functions used.
 
-The most successful trained models only ended up using song vectors as their sole feature, which may be a consequence of these features being heavily correlated with the song vectors. Also due to constraints of time, it was difficult to exhaustively explore permutations of features in the cross-validation step.
+#### Training Set Accuracy for Linear SVC
 
-![Confusion Matrix for classifier using Doc2Vec text representation](./report/confusion_matrix.png "Confusion Matrix for classifier using Doc2Vec text representation")
+Parameters: C = 1.0, TF-IDF max_df = 0.7, TF-IDF min_df = 5
+
+| Features          | Accuracy   |
+| ----------------- | ---------- |
+| Song Vectors Only | 80.8±5.9%  |
+| Four Features     | 75.4±4.2%  |
+| Five Features     | 51.4±16.7% |
+
+The most successful trained models only ended up using song vectors as their sole feature, see table above for example, which may be a consequence of these features being heavily correlated with the song vectors. Also due to constraints of time, it was difficult to exhaustively explore permutations of features in the cross-validation step. There was little variation within the parameter space of the most successful models, other than the C parameter of 1 and 10 for TF-IDF and Doc2Vec models respectively.
+
+![Confusion Matrix for classifier using Doc2Vec text representation](./confusion_matrix.png "Confusion Matrix for classifier using Doc2Vec text representation")
 
 
 #### Full Classification Report for Doc2Vec
